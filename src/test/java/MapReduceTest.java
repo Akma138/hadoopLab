@@ -1,6 +1,6 @@
-import eu.bitwalker.useragentutils.UserAgent;
 import bdtc.lab1.HW1Mapper;
 import bdtc.lab1.HW1Reducer;
+import calculate.Calculate;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -9,6 +9,7 @@ import org.apache.hadoop.mrunit.mapreduce.MapReduceDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
+import parser.CoordinateParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public class MapReduceTest {
     private ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
     private MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
 
-    private final String testIP = "ip1 - - [24/Apr/2011:04:06:01 -0400] \"GET /~strabal/grease/photo9/927-3.jpg HTTP/1.1\" 200 40028 \"-\" \"Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)\"\n";
+    private final String testIP = "13 24 43243 432432\"\n";
 
-    private UserAgent userAgent;
+    private CoordinateParser parser;
     @Before
     public void setUp() {
         HW1Mapper mapper = new HW1Mapper();
@@ -31,20 +32,20 @@ public class MapReduceTest {
         mapDriver = MapDriver.newMapDriver(mapper);
         reduceDriver = ReduceDriver.newReduceDriver(reducer);
         mapReduceDriver = MapReduceDriver.newMapReduceDriver(mapper, reducer);
-        userAgent = UserAgent.parseUserAgentString(testIP);
+        parser = CoordinateParser.parseCoordinate(testIP);
     }
 
     @Test
     public void testMapper() throws IOException {
         mapDriver
                 .withInput(new LongWritable(), new Text(testIP))
-                .withOutput(new Text(userAgent.getBrowser().getName()), new IntWritable(1))
+                .withOutput(new Text(Calculate.calculateArea(parser.getX(), parser.getY())), new IntWritable(1))
                 .runTest();
     }
 
     @Test
     public void testReducer() throws IOException {
-        List<IntWritable> values = new ArrayList<IntWritable>();
+        List<IntWritable> values = new ArrayList<>();
         values.add(new IntWritable(1));
         values.add(new IntWritable(1));
         reduceDriver
@@ -58,7 +59,7 @@ public class MapReduceTest {
         mapReduceDriver
                 .withInput(new LongWritable(), new Text(testIP))
                 .withInput(new LongWritable(), new Text(testIP))
-                .withOutput(new Text(userAgent.getBrowser().getName()), new IntWritable(2))
+                .withOutput(new Text(Calculate.calculateArea(parser.getX(), parser.getY())), new IntWritable(2))
                 .runTest();
     }
 }
