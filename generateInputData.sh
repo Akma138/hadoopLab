@@ -14,26 +14,41 @@ USER_AGENTS=("Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like
 			"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; sv-se) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
 			"Mozilliuz/5.0 (Hackintosh; U; Intel Macosev OS X 10_6_6; en-gb) bubu baba")
 
-# prefix doesn't mean something - it can be repetable
-PREFIX="ip1 - - [24/Apr/2011:04:06:01 -0400] \"GET /~strabal/grease/photo9/927-3.jpg HTTP/1.1\" 200 40028 \"-\" \""
+COORDINATES_X=(0 1 2 3 4 5 "MALFORMED" 6 7 8 9 10 11 12 13 14 15 16 "MALFORMED" 17 18 19 20 21 22 23 24 25 26 27 28 29 "MALFORMED")
+COORDINATES_Y=(0 1 2 3 4 5 "MALFORMED" 6 7 8 9 10 11 12 13 14 15 16 "MALFORMED" 17 18 19 20 21 22 23 24 25 26 27 28 29 "MALFORMED")
+
+# suffix doesn't mean something - it can be repetable
+SUFFIX="43243 432432"
 
 rm -rf input
 mkdir input
 
-for i in {1..200}
-	do 
-		RESULT="$PREFIX${USER_AGENTS[$((RANDOM % ${#USER_AGENTS[*]}))]}\""
+size=${#COORDINATES_X[@]}
+
+for i in {1..300}
+	do
+	  index_x=$(($RANDOM % $size))
+	  index_y=$(($RANDOM % $size))
+		RESULT="${COORDINATES_X[$index_x]} ${COORDINATES_Y[$index_y]} $SUFFIX"
 		echo $RESULT >> input/$1.1
 	done
 
-for i in {1..50}
+for i in {1..300}
 	do
-		RESULT="$PREFIX${USER_AGENTS[$((RANDOM % ${#USER_AGENTS[*]}))]}\""
+	  index_x=$(($RANDOM % $size))
+	  index_y=$(($RANDOM % $size))
+		RESULT="${COORDINATES_X[$index_x]} ${COORDINATES_Y[$index_y]} $SUFFIX"
 		echo $RESULT >> input/$1.2
 	done
 
-for i in {1..50}
+for i in {1..300}
 	do
-		RESULT="$PREFIX${USER_AGENTS[$((RANDOM % ${#USER_AGENTS[*]}))]}\""
+	  index_x=$(($RANDOM % $size))
+	  index_y=$(($RANDOM % $size))
+		RESULT="${COORDINATES_X[$index_x]} ${COORDINATES_Y[$index_y]} $SUFFIX"
 		echo $RESULT >> input/$1.3
 	done
+
+
+
+

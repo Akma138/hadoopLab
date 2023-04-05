@@ -24,7 +24,7 @@ public class MapReduceApplication {
         // задаём выходной файл, разделенный запятыми - формат CSV в соответствии с заданием
         conf.set("mapreduce.output.textoutputformat.separator", ",");
 
-        Job job = Job.getInstance(conf, "browser count");
+        Job job = Job.getInstance(conf, "hotness count");
         job.setJarByClass(MapReduceApplication.class);
         job.setMapperClass(HW1Mapper.class);
         job.setReducerClass(HW1Reducer.class);

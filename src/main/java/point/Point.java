@@ -2,19 +2,19 @@ package point;
 
 public class Point {
 
-    private String x;
-    private String y;
+    private int x;
+    private int y;
 
-    public Point(String x, String y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public String getX() {
+    public int getX() {
         return x;
     }
 
-    public String getY() {
+    public int getY() {
         return y;
     }
 }
